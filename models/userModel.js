@@ -1,28 +1,30 @@
 import mongoose, { Schema } from "mongoose";
 
-const userSchema = Schema(
+const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, 'Please enter your name'],
     },
     email: {
       type: String,
-      required: true,
+      required: [true, 'Please enter your email'],
       unique: true,
     },
     username: {
       type: String,
-      required: true,
+      required: [true, 'Please enter your username'],
+      minlength: [4, 'Your username must be at least 4 characters'],
       unique: true,
     },
     password: {
       type: String,
-      required: true,
+      required: [true, 'Please enter your password'],
+      minlength: [6, 'Your password must be at least 6 characters'],
     },
   },
   {
-    createdAt: true,
+    timestamps: true 
   }
 );
 
