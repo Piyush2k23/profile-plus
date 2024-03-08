@@ -1,0 +1,24 @@
+{
+  "name": "profile_plus",
+  "version": "1.0.0",
+  "description": "ProfilePlus: A Node.js and MongoDB-based API for social networking. Manage user profiles, posts, and follows efficiently with secure authentication.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Profile_Plus",
+    "Post",
+    "Social_Media"
+  ],
+  "author": "Piyush",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "dependencies": {
+    "express": "^4.18.3",
+    "mongoose": "^8.2.1"
+  }
+}
