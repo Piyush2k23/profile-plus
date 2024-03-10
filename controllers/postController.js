@@ -16,7 +16,6 @@ export const createPost = async (req, res) => {
 export const getPost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    console.log(post)
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
@@ -31,7 +30,7 @@ export const updatePost = async (req, res) => {
     const { content } = req.body;
 
     //find post
-     const post = await Post.findBtId(req.params.id); 
+     const post = await Post.findById(req.params.id); 
 
     //check post exists or not
      if(!post){
@@ -41,9 +40,6 @@ export const updatePost = async (req, res) => {
      //update post
     const updatedPost = await Post.findByIdAndUpdate(req.params.id, { content }, { new: true });
 
-    if (!updatedPost) {
-      return res.status(404).json({ error: 'Post not found' });
-    }
     res.status(200).json(updatedPost);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
@@ -54,7 +50,7 @@ export const deletePost = async (req, res) => {
   try {
      
     //find post
-     const post = await Post.findBtId(req.params.id); 
+     const post = await Post.findById(req.params.id); 
 
     //check post exists or not
      if(!post){
@@ -62,11 +58,8 @@ export const deletePost = async (req, res) => {
      }
 
     //delete post
-    const deletedPost = await Post.findByIdAndDelete(req.params.id);
+    await Post.findByIdAndDelete(req.params.id);
 
-    if (!deletedPost) {
-      return res.status(404).json({ error: 'Post not found' });
-    }
     res.status(200).json({ message: 'Post deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });

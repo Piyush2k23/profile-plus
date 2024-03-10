@@ -1,15 +1,31 @@
-import Follow from '../models/followModel';
+import Follow from '../models/followModel.js';
+import User from '../models/userModel.js';
+
 
 export const followUser = async (req, res) => {
   try {
-    const followerId = req.userId; // Assuming userId is extracted from JWT token
-    const { userId } = req.params;
+    const followerId = req.user.id; 
+    const userId = req.params.id;
+     console.log(followerId)
+     console.log(userId)
+
     const existingFollow = await Follow.findOne({ followerId, followingId: userId });
+
+    //check if user already follow
     if (existingFollow) {
       return res.status(400).json({ error: 'You are already following this user' });
     }
+
+    //follow user
     const newFollow = new Follow({ followerId, followingId: userId });
     await newFollow.save();
+
+    // Update the user's followers array
+    await User.findByIdAndUpdate(userId, { $push: { followers: followerId } });
+
+    // Update the follower's following array
+    await User.findByIdAndUpdate(followerId, { $push: { following: userId } });
+
     res.status(201).json({ message: 'User followed successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
@@ -30,7 +46,7 @@ export const unfollowUser = async (req, res) => {
   }
 };
 
-exports.getFollowing = async (req, res) => {
+export const getFollowing = async (req, res) => {
   try {
     const followerId = req.userId; // Assuming userId is extracted from JWT token
     const following = await Follow.find({ followerId }).populate('followingId', 'username');

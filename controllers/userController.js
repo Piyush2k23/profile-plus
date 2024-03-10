@@ -33,14 +33,14 @@ export const register = async (req, res) => {
     }
 
     //hash password
-    // const hashedPassword = hashPassword(password);
+    const hashedPassword = await hashPassword(password);
 
     //create new user
     const newUser = await User.create({
       name,
       username,
       email,
-      password
+      password: hashedPassword
     });
 
     //save new user in database
@@ -81,7 +81,7 @@ export const login = async (req, res) => {
     }
 
     //compare password
-    const isPasswordValid = comparePassword(password, user.password);
+    const isPasswordValid = await comparePassword(password, user.password);
 
     if (!isPasswordValid) {
       return res.status(200).json({
