@@ -40,7 +40,7 @@ export const register = async (req, res) => {
       name,
       username,
       email,
-      password: hashedPassword
+      password: hashedPassword,
     });
 
     //save new user in database
@@ -90,21 +90,20 @@ export const login = async (req, res) => {
       });
     }
 
-    const token = await jwt.sign({_id:user._id}, process.env.JWT_SECRET, {
+    const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
 
     res.cookie("token", token, {
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       httpOnly: true,
-    }); 
+    });
 
     res.status(200).json({
       success: true,
       message: "Login successfully",
       token,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -135,13 +134,58 @@ export const test = (req, res) => {
 };
 
 export const getUserProfile = async (req, res) => {
-  // Implementation for fetching user profile
+  try {
+    // Retrieve the user ID from the request object (assuming it's stored in req.user.id)
+    const userId = req.user.id;
+    // Fetch the user profile from the database
+    const userProfile = await User.findById(userId);
+    if (!userProfile) {
+      return res.status(404).json({ error: "User profile not found" });
+    }
+    // Send the user profile as the response
+    res.status(200).json({ userProfile });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 export const updateUserProfile = async (req, res) => {
-  // Implementation for updating user profile
+  try {
+    // Retrieve the user ID from the request object (assuming it's stored in req.user.id)
+    const userId = req.user.id;
+    // Retrieve the updated profile data from the request body
+    const { name, bio, profilePictureUrl } = req.body;
+    // Update the user profile in the database
+    const updatedUserProfile = await User.findByIdAndUpdate(
+      userId,
+      { name, bio, profilePictureUrl },
+      { new: true }
+    );
+    if (!updatedUserProfile) {
+      return res.status(404).json({ error: "User profile not found" });
+    }
+    // Send the updated user profile as the response
+    res.status(200).json({ userProfile: updatedUserProfile });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 export const deleteUserProfile = async (req, res) => {
-  // Implementation for deleting user profile
+  try {
+    // Retrieve the user ID from the request object (assuming it's stored in req.user.id)
+    const userId = req.user.id;
+    // Delete the user profile from the database
+    const deletedUserProfile = await User.findByIdAndDelete(userId);
+    if (!deletedUserProfile) {
+      return res.status(404).json({ error: "User profile not found" });
+    }
+    // Send a success message as the response
+    res.status(200).json({ message: "User profile deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };

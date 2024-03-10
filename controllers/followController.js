@@ -6,9 +6,7 @@ export const followUser = async (req, res) => {
   try {
     const followerId = req.user.id; 
     const userId = req.params.id;
-     console.log(followerId)
-     console.log(userId)
-
+   
     const existingFollow = await Follow.findOne({ followerId, followingId: userId });
 
     //check if user already follow
@@ -34,12 +32,17 @@ export const followUser = async (req, res) => {
 
 export const unfollowUser = async (req, res) => {
   try {
-    const followerId = req.userId; // Assuming userId is extracted from JWT token
-    const { userId } = req.params;
+    const followerId = req.user.id; 
+    const userId = req.params.id;
+   
     const deletedFollow = await Follow.findOneAndDelete({ followerId, followingId: userId });
     if (!deletedFollow) {
       return res.status(404).json({ error: 'You are not following this user' });
     }
+
+     // Remove the userId from the following array of the follower user
+     await User.findByIdAndUpdate(followerId, { $pull: { following: userId } });
+     
     res.status(200).json({ message: 'User unfollowed successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
@@ -48,7 +51,7 @@ export const unfollowUser = async (req, res) => {
 
 export const getFollowing = async (req, res) => {
   try {
-    const followerId = req.userId; // Assuming userId is extracted from JWT token
+    const followerId = req.user.id; 
     const following = await Follow.find({ followerId }).populate('followingId', 'username');
     res.status(200).json(following.map(follow => follow.followingId));
   } catch (error) {
@@ -58,7 +61,7 @@ export const getFollowing = async (req, res) => {
 
 export const getFollowers = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.params.id;
     const followers = await Follow.find({ followingId: userId }).populate('followerId', 'username');
     res.status(200).json(followers.map(follow => follow.followerId));
   } catch (error) {
