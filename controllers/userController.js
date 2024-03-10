@@ -33,14 +33,14 @@ export const register = async (req, res) => {
     }
 
     //hash password
-    const hashedPassword = hashPassword(password);
+    // const hashedPassword = hashPassword(password);
 
     //create new user
     const newUser = await User.create({
       name,
-      email,
       username,
-      password: hashedPassword,
+      email,
+      password
     });
 
     //save new user in database
@@ -94,10 +94,10 @@ export const login = async (req, res) => {
       expiresIn: "7d",
     });
 
-    // res.cookie("token", token, {
-    //   expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    //   httpOnly: true,
-    // }); 
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    }); 
 
     res.status(200).json({
       success: true,
@@ -125,4 +125,23 @@ export const logout = (req, res) => {
     success: true,
     message: "Logged out",
   });
+};
+
+export const test = (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Test",
+  });
+};
+
+export const getUserProfile = async (req, res) => {
+  // Implementation for fetching user profile
+};
+
+export const updateUserProfile = async (req, res) => {
+  // Implementation for updating user profile
+};
+
+export const deleteUserProfile = async (req, res) => {
+  // Implementation for deleting user profile
 };
