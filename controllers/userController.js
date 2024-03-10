@@ -102,7 +102,6 @@ export const login = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Login successfully",
-      token,
     });
   } catch (error) {
     res.status(500).json({
@@ -126,12 +125,6 @@ export const logout = (req, res) => {
   });
 };
 
-export const test = (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Test",
-  });
-};
 
 export const getUserProfile = async (req, res) => {
   try {

@@ -12,6 +12,9 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/", (req, res)=>{
+    res.send("<h1>Profile Plus</h1>");
+})
 app.use("/api/v1", user);
 app.use("/api/v1", post);
 app.use("/api/v1", follow);
