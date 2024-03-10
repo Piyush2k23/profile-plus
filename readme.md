@@ -23,9 +23,9 @@ npm install
 ### Environment Variables
 Create a `.env` file in the root directory of the project and add the following environment variables:
 
-PORT=5000
-MONGO_URL = mongodb+srv://profileplus:profileplusmongopassword@cluster0.vgzvk.mongodb.net/profile?retryWrites=true&w=majority
-JWT_SECRET = profileplusjwtsecretkey345456@456vhf
+-PORT=5000
+-MONGO_URL = mongodb+srv://profileplus:profileplusmongopassword@cluster0.vgzvk.mongodb.net/profile?retryWrites=true&w=majority
+-JWT_SECRET = profileplusjwtsecretkey345456@456vhf
 
 ### Running the Application
 - Start the server:
